@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Jobs | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .btn:hover {
+            background-color: #667eea;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .job-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+        }
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .job-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .job-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+        .meta-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        .recruiter-name {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-apply {
+            flex: 1;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-apply:hover {
+            background-color: #218838;
+        }
+        .btn-apply.applied {
+            background-color: #17a2b8;
+            cursor: not-allowed;
+        }
+        .btn-apply.applied:hover {
+            background-color: #138496;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .empty-state h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💼 Browse Jobs</h1>
+        <p>Find exciting opportunities that match your skills</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <a href="/dashboard" class="btn">← Back to Dashboard</a>
+            <a href="/myapplications" class="btn btn-primary">📋 My Applications</a>
+        </div>
+
+        {% if jobs %}
+            <div class="jobs-grid">
+                {% for job in jobs %}
+                    <div class="job-card">
+                        <div class="job-title">{{ job['title'] }}</div>
+                        <span class="badge">{{ job['job_type'] or 'Full-time' }}</span>
+                        
+                        <div class="job-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📍</span>
+                                <span>{{ job['location'] or 'Remote' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Salary:</span>
+                                <span>{{ job['salary_range'] or 'Competitive' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>
+                                    {% if job['posted_date'] %}
+                                        {{ job['posted_date'].strftime('%b %d, %Y') }}
+                                    {% else %}
+                                        Recently
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if job['deadline'] %}
+                            <div class="meta-item" style="margin-bottom: 15px; font-size: 13px; color: #e74c3c;">
+                                <span class="meta-icon">⏰</span>
+                                <span>Deadline: {{ job['deadline'].strftime('%b %d, %Y') }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="recruiter-name">Posted by: <strong>{{ job['recruiter_name'] }}</strong></div>
+
+                        {% if job.get('required_skills') %}
+                        <div style="margin-bottom: 15px; padding: 10px; background: #f0f4ff; border-radius: 5px; font-size: 12px;">
+                            <strong>Required Skills:</strong> {{ job['required_skills'] }}
+                        </div>
+                        {% endif %}
+
+                        <div class="job-actions">
+                            {% if job['job_id'] in applied_jobs %}
+                                <button class="btn-apply applied" disabled>✓ Already Applied</button>
+                            {% else %}
+                                <a href="/applyjob/{{ job['job_id'] }}" class="btn-apply">Apply Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+                <h2>No Jobs Available</h2>
+                <p>Check back later for new job opportunities</p>
+                <a href="/dashboard" class="btn">← Back to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

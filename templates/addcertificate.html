@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Certificate - SkillStamp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 28px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #4B0082;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            color: #4B0082;
+            margin: 0 0 24px;
+            font-size: 32px;
+        }
+
+        .page-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .btn-back {
+            color: #4B0082;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            text-decoration: underline;
+            color: #ffffff;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-row .btn {
+            flex: 1;
+        }
+
+        .field-help {
+            font-size: 12px;
+            color: #e0e0e0;
+            margin-top: 6px;
+        }
+
+        .file-input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #4B0082;
+            border-radius: 8px;
+            width: 100%;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .file-input::file-selector-button {
+            background: #4B0082;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .file-input::file-selector-button:hover {
+            background: #3a006b;
+        }
+
+        .form-error {
+            margin-bottom: 16px;
+            background-color: rgba(75, 0, 130, 0.2);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4B0082;
+        }
+
+        .form-group label {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #4B0082;
+            color: #ffffff;
+        }
+
+        .form-group input::placeholder,
+        .form-group select::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4B0082;
+            box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.3);
+        }
+
+        .form-group select option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            .form-container {
+                padding: 22px 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-wrapper">
+        <div class="form-container">
+            <div class="page-actions">
+                <span class="btn-back" onclick="history.back()">← Back</span>
+                <a href="/dashboard" class="btn btn-secondary btn-small">Dashboard</a>
+            </div>
+
+            <h1>Add New Certificate</h1>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% if error %}
+                    <div class="form-error">{{ error }}</div>
+                {% endif %}
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="course_name">Course Name</label>
+                        <input type="text" id="course_name" name="course_name" placeholder="e.g., Python Development" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="institution_name">Institution Name</label>
+                        <select id="institution_name" name="institution_name" required>
+                            <option value="" selected disabled>Select institution</option>
+                            {% for institution in institutions %}
+                                <option value="{{ institution.name }}">{{ institution.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issue_date">Issue Date</label>
+                        <input type="date" id="issue_date" name="issue_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="certificate_file">Upload Certificate File</label>
+                        <input class="file-input" type="file" id="certificate_file" name="certificate_file" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <div class="field-help">Accepted: PDF, JPG, JPEG, PNG</div>
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button type="submit" class="btn">Add Certificate</button>
+                    <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            &copy; 2026 SkillStamp | All Rights Reserved
+        </footer>
+    </div>
+</body>
+</html>

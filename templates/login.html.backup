@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillStamp - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .login-options {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-options h1 {
+            color: #4B0082;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .role-btn {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .role-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .role-btn h3 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .role-btn p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-form-container h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #4B0082;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #4B0082;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .register-link p {
+            margin: 0 0 10px 0;
+        }
+
+        .error-msg {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <!-- Login Role Selection Screen -->
+        <div id="roleSelector" class="login-options">
+            <h1>SkillStamp</h1>
+            <p class="login-subtitle">Select your login type</p>
+            
+            <div class="role-buttons">
+                <a href="javascript:void(0)" onclick="showLoginForm('user')" class="role-btn">
+                    <h3>Student</h3>
+                    <p>Login as a student to manage your skills and certificates</p>
+                </a>
+                
+                <a href="javascript:void(0)" onclick="showLoginForm('recruiter')" class="role-btn">
+                    <h3>Recruiter</h3>
+                    <p>Login to post jobs and manage candidates</p>
+                </a>
+                
+                <a href="javascript:void(0)" onclick="showLoginForm('admin')" class="role-btn">
+                    <h3>Admin</h3>
+                    <p>Login as administrator to manage the platform</p>
+                </a>
+            </div>
+
+            <div class="register-link">
+                <p>Don't have an account?</p>
+                <a href="/register" class="btn btn-secondary">Create Account</a>
+            </div>
+        </div>
+
+        <!-- Login Form Container -->
+        <div id="loginFormContainer" class="hidden login-form-container">
+            <div class="back-btn" onclick="showRoleSelector()">← Back to Role Selection</div>
+            
+            <h2 id="formTitle">User Login</h2>
+            
+            {% if error %}
+                <div class="error-msg">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn btn-block">Login</button>
+            </form>
+
+            <div class="login-link">
+                Don't have an account? <a href="/register">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 SkillStamp | All Rights Reserved
+    </footer>
+
+    <script>
+        let currentLoginType = null;
+
+        function showRoleSelector() {
+            document.getElementById('roleSelector').classList.remove('hidden');
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            currentLoginType = null;
+        }
+
+        function showLoginForm(role) {
+            currentLoginType = role;
+            let formTitle = 'User Login';
+            let endpoint = '/userlogin';
+
+            if (role === 'recruiter') {
+                formTitle = 'Recruiter Login';
+                endpoint = '/recruiterlogin';
+            } else if (role === 'admin') {
+                formTitle = 'Admin Login';
+                endpoint = '/adminlogin';
+            }
+
+            document.getElementById('formTitle').textContent = formTitle;
+            document.getElementById('loginForm').action = endpoint;
+            document.getElementById('loginForm').method = 'POST';
+
+            document.getElementById('roleSelector').classList.add('hidden');
+            document.getElementById('loginFormContainer').classList.remove('hidden');
+        }
+
+        // If error exists, show the appropriate form
+        {% if error %}
+            // Determine which role based on the referrer or error context
+            const path = window.location.pathname;
+            if (path.includes('recruiter')) {
+                showLoginForm('recruiter');
+            } else if (path.includes('admin')) {
+                showLoginForm('admin');
+            } else {
+                showLoginForm('user');
+            }
+        {% endif %}
+    </script>
+</body>
+</html>

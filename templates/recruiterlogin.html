@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Login | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(75, 0, 130, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        .login-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            border: 2px solid #4B0082;
+        }
+        .login-info {
+            background: rgba(0, 0, 0, 0.9);
+            border-right: 2px solid #4B0082;
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .login-info h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #4B0082;
+        }
+        .login-info p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            color: #e0e0e0;
+        }
+        .features {
+            margin-top: 30px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #e0e0e0;
+        }
+        .feature-item::before {
+            content: '✓';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: rgba(75, 0, 130, 0.3);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 12px;
+            font-weight: bold;
+            color: #4B0082;
+        }
+        .login-container {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .login-header {
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #4B0082;
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #4B0082;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #4B0082;
+            box-shadow: 0 0 0 4px rgba(75, 0, 130, 0.3);
+        }
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4B0082;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background: #3a006b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(75, 0, 130, 0.5);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .links {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .links p {
+            margin: 10px 0;
+            color: #e0e0e0;
+        }
+        .links a {
+            color: #4B0082;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .error {
+            background-color: rgba(75, 0, 130, 0.2);
+            color: #ff6b6b;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4B0082;
+            font-size: 14px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .badge {
+            display: inline-block;
+            background-color: #4B0082;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .login-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .login-info {
+                padding: 40px 30px;
+                display: none;
+            }
+            .login-container {
+                padding: 40px 30px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-info">
+            <h2>🎯 Recruiter Access</h2>
+            <p>Discover and manage top talent for your organization.</p>
+            
+            <div class="features">
+                <div class="feature-item">View verified candidate certificates</div>
+                <div class="feature-item">Review job applications & skills</div>
+                <div class="feature-item">Post and manage job openings</div>
+                <div class="feature-item">Track application status in real-time</div>
+                <div class="feature-item">Access candidate profiles with skills</div>
+            </div>
+        </div>
+        
+        <div class="login-container">
+            <div class="login-header">
+                <h1>SkillStamp <span class="badge">Recruiter</span></h1>
+                <div class="subtitle">Sign in to your recruiter account</div>
+            </div>
+            
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" action="/recruiterlogin">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your@company.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit">Sign In as Recruiter</button>
+            </form>
+            
+            <div class="links">
+                <p>Don't have a recruiter account? <a href="/recruiter-register">Register here</a></p>
+                <p><a href="/">← Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

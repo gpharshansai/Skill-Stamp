@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillStamp Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .navbar-menu a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .dashboard-title {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-nav {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #4B0082;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        .dashboard-nav h2 {
+            margin: 0;
+            color: var(--accent-color);
+        }
+
+        .dashboard-nav .btn-logout {
+            background-color: #e74c3c;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .dashboard-nav .btn-logout:hover {
+            background-color: #c0392b;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #4B0082;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .feature-card .btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .stats-section {
+            margin-bottom: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn-small {
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+        }
+
+        .admin-section .feature-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .recruiter-section .feature-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .application-updates {
+            margin-top: 8px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #4B0082;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            padding: 20px;
+        }
+
+        .application-updates h3 {
+            margin: 0 0 14px;
+            color: var(--accent-color);
+        }
+
+        .application-update-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(75, 0, 130, 0.35);
+            padding: 10px 0;
+        }
+
+        .application-update-item:last-child {
+            border-bottom: none;
+        }
+
+        .application-job-title {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .application-status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .application-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .application-status.accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .application-status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SkillStamp</h1>
+        <p id="headerSubtitle">Manage your profile</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Navigation Bar -->
+        <div class="dashboard-nav">
+            <h2 id="dashboardTitle">Welcome, {{ name }}!</h2>
+            <div>
+                <a href="/logout" class="btn btn-logout">Logout</a>
+            </div>
+        </div>
+
+        <!-- STUDENT/USER DASHBOARD -->
+        <div id="studentDashboard" class="dashboard-section">
+            <p class="dashboard-title">Student Dashboard - Manage your career profile</p>
+
+            <div class="card-grid">
+                <!-- Certificates Section -->
+                <div class="feature-card">
+                    <h3>My Certificates</h3>
+                    <p>View and manage all your certificates and credentials</p>
+                    <a href="/mycertificates" class="btn">View Certificates</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Add Certificate</h3>
+                    <p>Upload a new certificate or credential</p>
+                    <a href="/addcertificate" class="btn">Add Certificate</a>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="feature-card">
+                    <h3>My Skills</h3>
+                    <p>Manage your technical and professional skills</p>
+                    <a href="/myskills" class="btn">Manage Skills</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Add Skill</h3>
+                    <p>Add a new skill to your profile</p>
+                    <a href="/addskill" class="btn">Add Skill</a>
+                </div>
+
+                <!-- Jobs Section -->
+                <div class="feature-card">
+                    <h3>Browse Jobs</h3>
+                    <p>Find and apply for job opportunities</p>
+                    <a href="/jobs" class="btn">Browse Jobs</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>My Applications</h3>
+                    <p>Track your job applications and status</p>
+                    <a href="/myapplications" class="btn">View Applications</a>
+                </div>
+            </div>
+
+            <div class="application-updates">
+                <h3>Recent Application Updates</h3>
+                {% if recent_applications %}
+                    {% for app in recent_applications %}
+                        {% set status_value = (app.status or 'pending')|lower %}
+                        <div class="application-update-item">
+                            <div class="application-job-title">{{ app.title }}</div>
+                            <span class="application-status {{ status_value }}">
+                                {{ status_value }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #bbb; margin: 0;">No applications yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RECRUITER DASHBOARD -->
+        <div id="recruiterDashboard" class="recruiter-section hidden">
+            <p class="dashboard-title">Recruiter Dashboard - Manage jobs and candidates</p>
+
+            <!-- Statistics -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.total_jobs }}</div>
+                    <div class="stat-label">Total Jobs Posted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.active_jobs }}</div>
+                    <div class="stat-label">Active Jobs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.total_applications }}</div>
+                    <div class="stat-label">Total Applications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.pending_applications }}</div>
+                    <div class="stat-label">Pending Applications</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card-grid">
+                <div class="feature-card">
+                    <h3>Post New Job</h3>
+                    <p>Create a new job listing</p>
+                    <a href="/postjob" class="btn">Post Job</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>My Job Postings</h3>
+                    <p>View and manage your job listings</p>
+                    <a href="/recruiter_dashboard" class="btn">View Jobs</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Candidates</h3>
+                    <p>View all candidates who applied</p>
+                    <a href="/recruiter_candidates" class="btn">View Candidates</a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Applications</h3>
+                    <p>Track job applications and responses</p>
+                    {% if jobs and jobs|length > 0 %}
+                    <a href="/jobapplications/{{ jobs[0].job_id }}" class="btn">Manage Applications</a>
+                    {% else %}
+                    <a href="/recruiter_candidates" class="btn">Manage Applications</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Job Postings -->
+            {% if jobs %}
+            <div class="main-content">
+                <h3>Recent Job Postings</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Posted Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for job in jobs[:5] %}
+                            <tr>
+                                <td>{{ job.title }}</td>
+                                <td>{{ job.location }}</td>
+                                <td>{{ job.job_type }}</td>
+                                <td>{{ job.posted_date }}</td>
+                                <td>
+                                    <span class="badge" style="padding: 4px 8px; border-radius: 4px; font-size: 12px; {% if job.status == 'active' %}background: #d4edda; color: #155724;{% else %}background: #f8d7da; color: #721c24;{% endif %}">
+                                        {{ job.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/jobapplications/{{ job.job_id }}" class="btn btn-small">View Applications</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ADMIN DASHBOARD -->
+        <div id="adminDashboard" class="admin-section hidden">
+            <p class="dashboard-title">Admin Dashboard - Verify Certificates</p>
+
+            <div class="main-content">
+                {% if certificates %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Certificate ID</th>
+                                <th>Certificate Code</th>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Course Name</th>
+                                <th>Institution</th>
+                                <th>Issue Date</th>
+                                <th>Certificate File</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cert in certificates %}
+                            <tr>
+                                <td>{{ cert.certificate_id }}</td>
+                                <td>{{ cert.cert_code or ('CERT-ID-' ~ cert.certificate_id) }}</td>
+                                <td>{{ cert.student_name }}</td>
+                                <td>{{ cert.email }}</td>
+                                <td>{{ cert.course_name }}</td>
+                                <td>{{ cert.institution_name or cert.institution_id }}</td>
+                                <td>{{ cert.issue_date }}</td>
+                                <td>
+                                    {% if cert.certificate_file_path %}
+                                        <a href="/{{ cert.certificate_file_path }}" target="_blank" class="btn btn-small" style="padding: 4px 8px; font-size: 12px; margin-right: 4px;">View</a>
+                                        <a href="/{{ cert.certificate_file_path }}" download class="btn btn-small" style="padding: 4px 8px; font-size: 12px;">Download</a>
+                                    {% else %}
+                                        <span style="color: #999; font-size: 12px;">No file</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge" style="padding: 4px 8px; border-radius: 4px; font-size: 12px; {% if cert.verification_status == 'verified' %}background: #d4edda; color: #155724;{% else %}background: #fff3cd; color: #856404;{% endif %}">
+                                        {{ cert.verification_status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <form method="POST" action="/admin/verify-certificate/{{ cert.certificate_id }}" style="display: inline;">
+                                        <select name="verification_status" style="padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-right: 5px; background: #111; color: #fff; border: 1px solid #4B0082;">
+                                            <option value="pending" {% if cert.verification_status == 'pending' %}selected{% endif %}>Pending</option>
+                                            <option value="verified" {% if cert.verification_status == 'verified' %}selected{% endif %}>Verified</option>
+                                            <option value="rejected" {% if cert.verification_status == 'rejected' %}selected{% endif %}>Rejected</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-small" style="padding: 4px 8px; font-size: 12px;">Verify</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="feature-card">
+                    <h3>Verify Certificates</h3>
+                    <p>No certificates pending verification at this time.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 SkillStamp | All Rights Reserved
+    </footer>
+
+    <script>
+        // Determine which dashboard to show based on user role
+        function showAppropiateDashboard() {
+            const role = '{{ role }}' || 'student';
+            
+            const studentDash = document.getElementById('studentDashboard');
+            const recruiterDash = document.getElementById('recruiterDashboard');
+            const adminDash = document.getElementById('adminDashboard');
+
+            if (recruiterDash) recruiterDash.classList.add('hidden');
+            if (adminDash) adminDash.classList.add('hidden');
+            if (studentDash) studentDash.classList.add('hidden');
+
+            if (role === 'recruiter' && recruiterDash) {
+                recruiterDash.classList.remove('hidden');
+                document.getElementById('headerSubtitle').textContent = 'Manage jobs and candidates';
+            } else if (role === 'admin' && adminDash) {
+                adminDash.classList.remove('hidden');
+                document.getElementById('headerSubtitle').textContent = 'Manage the platform';
+            } else if (studentDash) {
+                studentDash.classList.remove('hidden');
+                document.getElementById('headerSubtitle').textContent = 'Manage your career profile';
+            }
+        }
+
+        // Check for role from hidden data attribute or show student by default
+        document.addEventListener('DOMContentLoaded', showAppropiateDashboard);
+    </script>
+</body>
+</html>

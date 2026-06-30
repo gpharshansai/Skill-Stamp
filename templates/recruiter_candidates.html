@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidates & Certificates | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .btn:hover {
+            background-color: #667eea;
+            color: white;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border-top: 4px solid #667eea;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        .candidate-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .contact-info {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .contact-item {
+            margin-bottom: 5px;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .skill-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .skill-level {
+            background: #e8f0fe;
+            color: #667eea;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-left: 4px;
+        }
+        .certificate-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #667eea;
+        }
+        .cert-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .cert-info {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .cert-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .status-verified {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-notverified {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .empty-title {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .empty-text {
+            color: #999;
+            margin-bottom: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👥 Candidates & Certificates</h1>
+        <p>View all your job applicants with their qualifications</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <a href="/recruiter_dashboard" class="btn">← Back to Dashboard</a>
+        </div>
+
+        {% if candidates %}
+            <div class="grid">
+                {% for candidate in candidates %}
+                    <div class="card">
+                        <div class="candidate-name">👤 {{ candidate['name'] }}</div>
+                        
+                        <div class="contact-info">
+                            {% if candidate['email'] %}
+                                <div class="contact-item">📧 {{ candidate['email'] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Skills Section -->
+                        {% if candidate['skills'] %}
+                            <div class="section-title">🎯 Skills</div>
+                            <div class="skills-list">
+                                {% for skill in candidate['skills'] %}
+                                    <span class="skill-tag">
+                                        {{ skill['skill_name'] }}
+                                        <span class="skill-level">{{ skill['proficiency_level'] }}</span>
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="section-title">🎯 Skills</div>
+                            <div style="color: #999; font-size: 13px; margin-bottom: 15px;">No skills added</div>
+                        {% endif %}
+
+                        <!-- Certificates Section -->
+                        {% if candidate['certificates'] %}
+                            <div class="section-title">📜 Certificates</div>
+                            <div>
+                                {% for cert in candidate['certificates'] %}
+                                    <div class="certificate-item">
+                                        <div class="cert-name">{{ cert['course_name'] }}</div>
+                                        <div class="cert-info">
+                                            Institution: {{ cert['institution_name'] or cert['institution_id'] }}<br>
+                                            Issued: {{ cert['issue_date'].strftime('%b %Y') if cert['issue_date'] else 'N/A' }}
+                                        </div>
+                                        <span class="cert-status {% if cert['verification_status'] == 'verified' %}status-verified{% elif cert['verification_status'] == 'notverified' %}status-notverified{% else %}status-pending{% endif %}">
+                                            {% if cert['verification_status'] == 'verified' %}
+                                                ✓ Verified
+                                            {% elif cert['verification_status'] == 'notverified' %}
+                                                ✗ Not Verified
+                                            {% else %}
+                                                ⏳ {{ cert['verification_status'] }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="section-title">📜 Certificates</div>
+                            <div style="color: #999; font-size: 13px;">No certificates</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <div class="empty-title">No Candidates Yet</div>
+                <div class="empty-text">Candidates who apply for your jobs will appear here</div>
+                <a href="/recruiter_dashboard" class="btn">← Back to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SkillStamp | All Rights Reserved | Empowering Talent Discovery</p>
+    </footer>
+</body>
+</html>

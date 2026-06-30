@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Issue Certificate - SkillChain</title>
+  <style>
+    body {
+      background-color: #000000;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 80px;
+    }
+    h1 {
+      color: #4B0082;
+      font-size: 40px;
+    }
+    p {
+      color: #e0e0e0;
+      font-size: 18px;
+    }
+    .form-box {
+      display: inline-block;
+      text-align: left;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #4B0082;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(75, 0, 130, 0.3);
+      min-width: 300px;
+    }
+    label {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #4B0082;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      box-sizing: border-box;
+    }
+    input::placeholder,
+    select::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #4B0082;
+      box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.3);
+    }
+    select option {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4B0082;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s, transform 0.2s;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #3a006b;
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+    footer {
+      margin-top: 60px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="color:#5A00D2; font-size:40px;">Issue a Certificate</h1>
+  <p style="color:#555; font-size:18px;">Fill in the details below to issue a certificate</p>
+
+  <form method="POST" class="form-box">
+    {% if error %}
+    <p style="color: #b00020; margin-bottom: 10px; font-size: 14px;">{{ error }}</p>
+    {% endif %}
+
+    <label>User Email:</label><br>
+    <input name="email" type="email" required><br>
+
+    <label>Course Name:</label><br>
+    <input name="course_name" required><br>
+
+    <label>Institution Name:</label><br>
+    <select name="institution_name" required>
+      <option value="" selected disabled>Select institution</option>
+      {% for institution in institutions %}
+      <option value="{{ institution.name }}">{{ institution.name }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label>Issue Date:</label><br>
+    <input name="issue_date" type="date" required><br>
+
+    <button type="submit">Issue Certificate</button>
+  </form>
+
+  <footer>&copy; 2026 SkillChain</footer>
+
+</body>
+</html>

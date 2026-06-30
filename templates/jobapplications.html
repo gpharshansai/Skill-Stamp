@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applications | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            font-size: 38px;
+            margin-bottom: 5px;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .btn:hover {
+            background-color: #667eea;
+            color: white;
+        }
+        .job-header {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .job-header h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        .job-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            font-size: 14px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        .applicants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .applicant-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border-top: 4px solid #667eea;
+        }
+        .applicant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .applicant-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .applicant-contact {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .contact-item {
+            margin-bottom: 5px;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .skills-list,
+        .certificates-list {
+            margin-bottom: 15px;
+        }
+        .skill-item,
+        .certificate-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid #667eea;
+            font-size: 13px;
+        }
+        .skill-name,
+        .certificate-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .skill-level {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .certificate-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+            margin-left: 8px;
+        }
+        .status-verified {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-notverified {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .certificate-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .application-status {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .current-status {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 600;
+        }
+        .status-pill {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .status-pill.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-pill.accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-pill.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-dropdown {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .status-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .status-btn.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-btn.pending:hover {
+            background-color: #ffeaa7;
+        }
+        .status-btn.accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-btn.accepted:hover {
+            background-color: #c3e6cb;
+        }
+        .status-btn.rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-btn.rejected:hover {
+            background-color: #f5c6cb;
+        }
+        .status-btn.active {
+            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.15);
+            cursor: default;
+            pointer-events: none;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .empty-state h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👥 Job Applications</h1>
+        <p>Review applicants and their qualifications</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <a href="/recruiter_dashboard" class="btn">← Back to Dashboard</a>
+            <a href="/recruiter_candidates" class="btn">📊 All Candidates</a>
+        </div>
+
+        {% if job %}
+            <div class="job-header">
+                <h2>{{ job['title'] }}</h2>
+                <div class="job-info">
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>{{ job['location'] or 'Remote' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">💼</span>
+                        <span>{{ job['job_type'] or 'Full-time' }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if applications %}
+            <div class="applicants-grid">
+                {% for app in applications %}
+                    <div class="applicant-card">
+                        <div class="applicant-name">👤 {{ app['name'] }}</div>
+                        
+                        <div class="applicant-contact">
+                            {% if app['email'] %}
+                                <div class="contact-item">📧 {{ app['email'] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Skills Section -->
+                        {% if app['skills'] %}
+                            <div class="section-title">🎯 Skills</div>
+                            <div class="skills-list">
+                                {% for skill in app['skills'] %}
+                                    <div class="skill-item">
+                                        <div class="skill-name">{{ skill['skill_name'] }}</div>
+                                        <span class="skill-level">{{ skill['proficiency_level'] }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="section-title">🎯 Skills</div>
+                            <div style="color: #999; font-size: 13px; margin-bottom: 15px;">No skills added</div>
+                        {% endif %}
+
+                        <!-- Certificates Section -->
+                        {% if app['certificates'] %}
+                            <div class="section-title">📜 Certificates</div>
+                            <div class="certificates-list">
+                                {% for cert in app['certificates'] %}
+                                    <div class="certificate-item">
+                                        <div class="certificate-name">{{ cert['course_name'] }}</div>
+                                        <div class="certificate-info">
+                                            From: {{ cert['institution_name'] or cert['institution_id'] }}<br>
+                                            Issued: {{ cert['issue_date'].strftime('%b %Y') if cert['issue_date'] else 'N/A' }}
+                                        </div>
+                                        <span class="certificate-status {% if cert['verification_status'] == 'verified' %}status-verified{% elif cert['verification_status'] == 'notverified' %}status-notverified{% else %}status-pending{% endif %}">
+                                            {% if cert['verification_status'] == 'verified' %}
+                                                ✓ Verified
+                                            {% elif cert['verification_status'] == 'notverified' %}
+                                                ✗ Not Verified
+                                            {% else %}
+                                                ⏳ {{ cert['verification_status'] }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="section-title">📜 Certificates</div>
+                            <div style="color: #999; font-size: 13px; margin-bottom: 15px;">No certificates</div>
+                        {% endif %}
+
+                        <!-- Application Status -->
+                        <div class="application-status">
+                            <div class="section-title">Status</div>
+                            {% set current_status = (app['status'] or 'pending')|lower %}
+                            <div class="current-status">
+                                Current:
+                                <span class="status-pill {{ current_status }}">{{ current_status }}</span>
+                            </div>
+                            <div class="status-dropdown">
+                                <form method="POST" action="/updateapplicationstatus/{{ app['application_id'] }}/pending" style="flex: 1;">
+                                    <button type="submit" class="status-btn pending {% if current_status == 'pending' %}active{% endif %}">⏳ Pending</button>
+                                </form>
+                                <form method="POST" action="/updateapplicationstatus/{{ app['application_id'] }}/accepted" style="flex: 1;">
+                                    <button type="submit" class="status-btn accepted {% if current_status == 'accepted' %}active{% endif %}">✓ Accept</button>
+                                </form>
+                                <form method="POST" action="/updateapplicationstatus/{{ app['application_id'] }}/rejected" style="flex: 1;">
+                                    <button type="submit" class="status-btn rejected {% if current_status == 'rejected' %}active{% endif %}">✗ Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+                <h2>No Applications Yet</h2>
+                <p>Applications will appear here once candidates apply for this job</p>
+                <a href="/recruiter_dashboard" class="btn">← Back to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

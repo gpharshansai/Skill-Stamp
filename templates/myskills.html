@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Skills | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .btn:hover {
+            background-color: #667eea;
+            color: white;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        .btn-back {
+            background-color: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        .btn-back:hover {
+            background-color: #c0392b;
+        }
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .content h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 28px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .skill-card {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .skill-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .skill-id {
+            font-size: 13px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .skill-level {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+        .skill-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        .skill-experience {
+            font-size: 13px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .skill-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-delete {
+            flex: 1;
+            padding: 8px 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #ddd;
+        }
+        .empty-state h3 {
+            color: #999;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .empty-state p {
+            color: #bbb;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 My Skills</h1>
+        <p>Manage your professional skills</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+            <a href="/addskill" class="btn btn-add">+ Add New Skill</a>
+        </div>
+
+        <div class="content">
+            <h2>Your Skills ({{ skills|length }})</h2>
+            
+            {% if skills %}
+                <div class="skills-grid">
+                    {% for skill in skills %}
+                        <div class="skill-card">
+                            <div class="skill-name">{{ skill['skill_name'] }}</div>
+                            <div class="skill-id">Skill ID: {{ skill['skill_id'] }}</div>
+                            <span class="skill-level">{{ skill['experience_level'] or 'beginner' }}</span>
+                            <div class="skill-experience">Experience: {{ skill['years_of_experience'] or 0 }} year(s)</div>
+                            <div class="skill-date">Added: Recently</div>
+                            <div class="skill-actions">
+                                <form method="POST" action="/deleteskill/{{ skill['user_skill_id'] }}" style="flex: 1;">
+                                    <button type="submit" class="btn-delete" onclick="return confirm('Delete this skill?')">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h3>📭 No Skills Yet</h3>
+                    <p>Start by adding your first professional skill to showcase your expertise</p>
+                    <a href="/addskill" class="btn btn-add">+ Add Your First Skill</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Certificates | SkillStamp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        h1 {
+            color: #4B0082;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .welcome {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            color: white;
+            background-color: #6A5ACD;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #5a4eb1;
+        }
+
+        .btn-back {
+            background-color: #B22222;
+        }
+
+        .btn-back:hover {
+            background-color: #9e1e1e;
+        }
+
+        .btn-download {
+            background-color: #228B22;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .btn-download:hover {
+            background-color: #1a6b1a;
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .certificate-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #6A5ACD;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .certificate-card h3 {
+            color: #4B0082;
+            font-size: 22px;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+
+        .certificate-details {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #1a1a1a;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #555;
+            word-break: break-word;
+            text-align: right;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .status-verified {
+            background-color: #90EE90;
+            color: #1a5e1a;
+        }
+
+        .status-pending {
+            background-color: #FFD700;
+            color: #8B6500;
+        }
+
+        .status-rejected {
+            background-color: #FFB6C6;
+            color: #8B0000;
+        }
+
+        .file-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .file-label {
+            color: #1a1a1a;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            color: #333;
+            word-break: break-word;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state h2 {
+            color: #4B0082;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #777;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #999;
+            padding-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .welcome {
+                font-size: 18px;
+            }
+
+            .certificates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-value {
+                text-align: left;
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>SkillStamp</h1>
+            <div class="welcome">Welcome, {{ name }}! 👤</div>
+        </header>
+
+        <div class="button-group">
+            <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+        </div>
+
+        {% if certificates %}
+            <div class="certificates-grid">
+                {% for cert in certificates %}
+                    <div class="certificate-card">
+                        <h3>📜 {{ cert['course_name'] }}</h3>
+                        
+                        <div class="certificate-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Certificate ID:</span>
+                                <span class="detail-value">{{ cert['cert_code'] or ('CERT-ID-' ~ cert['certificate_id']) }}</span>
+                            </div>
+                            
+                            {% if cert['institution_name'] %}
+                                <div class="detail-row">
+                                    <span class="detail-label">Institution:</span>
+                                    <span class="detail-value">{{ cert['institution_name'] }}</span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">Issue Date:</span>
+                                <span class="detail-value">{{ cert['issue_date'] }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">
+                                    {% if cert['verification_status'] and cert['verification_status']|lower == 'verified' %}
+                                        <span class="status-badge status-verified">✓ Verified</span>
+                                    {% elif cert['verification_status'] and cert['verification_status']|lower == 'pending' %}
+                                        <span class="status-badge status-pending">⏳ Pending</span>
+                                    {% else %}
+                                        <span class="status-badge status-rejected">✗ Rejected</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if cert['certificate_file_path'] %}
+                            <div class="file-section">
+                                <span class="file-label">Certificate File:</span>
+                                <div class="file-preview">
+                                    <div class="file-icon">
+                                        {% if cert['certificate_file_path'].endswith('.pdf') %}
+                                            📄
+                                        {% else %}
+                                            🖼️
+                                        {% endif %}
+                                    </div>
+                                    <div class="file-info">
+                                        <div class="file-name">{{ cert['certificate_file_path'].split('/')[-1] }}</div>
+                                    </div>
+                                </div>
+                                <a href="/{{ cert['certificate_file_path'] }}" class="btn btn-download" download>📥 Download</a>
+                            </div>
+                        {% else %}
+                            <div class="file-section">
+                                <span class="file-label">Certificate File:</span>
+                                <p style="color: #999; font-size: 14px;">No file uploaded</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h2>No Certificates Yet</h2>
+                <p>You haven't uploaded any certificates. Start by adding your first certificate!</p>
+                <a href="/addcertificate" class="btn">➕ Add Your First Certificate</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>&copy; 2026 SkillStamp | All Rights Reserved</footer>
+
+</body>
+</html>
