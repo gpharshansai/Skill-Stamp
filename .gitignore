@@ -1,0 +1,7 @@
+__pycache__/
+uploads/
+*.pyc
+*.pyo
+*.env
+README.md
+*.backup
